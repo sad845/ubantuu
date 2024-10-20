@@ -1,0 +1,42 @@
+step 1:- sudo apt-get install apache2
+additional check apache is on or not using 
+sudo systemctl apache2 start 
+sudo systemctl apache2 enable
+sudo systemctl apache2 status
+
+step 2:- sudo chmod -R 777 /var/www/html
+
+step 3:- sudo apt-get install php
+
+step 4:- sudo apt-get install mysql-server mysql-client
+
+set the password for your MySQL
+
+enter the password and press ok  
+
+step 5:- MySQL -u root -p
+
+enter the MySQL password u created above and login to MySQL
+
+ MySQL :- show databases;
+ MySQL :- exit
+
+step 6 :- sudo apt-get install phpmyadmin
+
+it will direct u to configuring phpMyAdmin
+
+press the space bar there and then a star(*) mark will be displayed in the apache2 section  example
+[*] apache2 
+then press ok 
+
+then u will be directed to another page where you have to select "no"
+example:-
+Configure database for phpmyadmin with dbconfig-common?  
+                                
+       <Yes>                            <No>    
+
+select "no" from above and again press ok
+
+step 7:- sudo service apache2 restart
+
+go to browser search "http://localhost/phpmyadmin"

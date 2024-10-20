@@ -1,0 +1,219 @@
+# Practical 9 MYSQL
+
+Here’s the corrected format for your MySQL and phpMyAdmin installation guide, organized step by step:
+
+---
+
+## Step 1: Update the System
+
+Ensure your package list is up-to-date:
+
+---
+
+## Step 2: Install MySQL Server
+
+Install the MySQL server package:
+
+bash
+sudo apt install mysql-server
+
+
+During the installation, you'll be prompted to set a root password. Set it to a secure password of your choice.
+
+---
+
+## Step 3: Secure MySQL Installation
+
+Run the security script to secure MySQL:
+
+bash
+sudo mysql_secure_installation
+
+
+You will be prompted to:
+
+- Set or change the root password (if you didn't do so during installation).
+- Remove anonymous users.
+- Disallow root login remotely.
+- Remove test databases and access.
+- Reload privilege tables.
+
+Answer 'Y' to each for better security.
+
+---
+
+## Step 4: Create the 'gopal_gopal' Database and User
+
+Log in to the MySQL root account:
+
+bash
+sudo mysql -u root -p
+
+
+Once logged in, create your database and user:
+
+sql
+CREATE DATABASE gopal_gopal;
+CREATE USER 'gopal'@'localhost' IDENTIFIED BY 'gopal1510';
+GRANT ALL PRIVILEGES ON gopal_gopal.* TO 'gopal'@'localhost';
+GRANT ALL PRIVILEGES ON gopal_gopal.* TO 'gopal'@'%';
+FLUSH PRIVILEGES;
+EXIT;
+
+
+This creates a database called gopal_gopal, a user gopal, and assigns full privileges to that user.
+
+---
+
+## Step 5: Install PHP and Apache
+
+To install phpMyAdmin, you need Apache and PHP. Install them using:
+
+bash
+sudo apt install apache2
+sudo apt install php libapache2-mod-php php-mysql
+
+
+
+---
+
+## Step 6: Install phpMyAdmin
+
+Install phpMyAdmin to manage MySQL via a web browser:
+
+bash
+sudo apt install phpmyadmin
+
+
+
+During the installation:
+
+- Choose apache2 when prompted.
+- Select 'Yes' to configure the database for phpMyAdmin.
+- Set a MySQL application password for phpMyAdmin (you can leave it blank to generate automatically).
+
+---
+
+## Step 7: Configure Apache for phpMyAdmin
+
+If the configuration isn't automatically included, manually add it:
+
+bash
+sudo nano /etc/apache2/apache2.conf
+
+
+
+Add this line at the bottom:
+
+bash
+Include /etc/phpmyadmin/apache.conf
+
+
+
+Save and exit the editor (Ctrl+X, then Y, then Enter).
+
+---
+
+## Step 8: Restart Apache
+
+Restart Apache to apply the changes:
+
+bash
+sudo systemctl restart apache2
+
+
+
+---
+
+## Step 9: Access phpMyAdmin
+
+Now you can access phpMyAdmin by visiting:
+
+
+<http://your-server-ip/phpmyadmin>
+
+
+
+Log in using the MySQL user gopal and the password gopal1510. You should now have MySQL and phpMyAdmin installed, with your gopal_gopal database ready to use!
+
+---
+
+## Step 10: Configure MySQL for Remote Access
+
+### On the Server:
+
+1. *Edit MySQL Configuration File:*
+    
+    Open the MySQL configuration file for editing:
+    
+    bash
+    sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+    
+    
+    
+2. *Change the Bind Address:*
+    
+    Find the line that reads bind-address = 127.0.0.1 and change it to:
+    
+    bash
+    bind-address = 0.0.0.0
+    
+    
+    
+    This will allow MySQL to listen for connections from any IP address. Save and exit the file (Ctrl+X, then Y, then Enter).
+    
+3. *Grant Remote Access to MySQL User:*
+    
+    You need to allow the user gopal to connect from a remote host, instead of just localhost. Log in to MySQL:
+    
+    bash
+    sudo mysql -u root -p
+    
+    
+    
+    Then run the following command to allow gopal to connect from any remote host (% signifies any IP address):
+    
+    sql
+    GRANT ALL PRIVILEGES ON gopal_gopal.* TO 'gopal'@'%' IDENTIFIED BY 'gopal1510';
+    FLUSH PRIVILEGES;
+    EXIT;
+    
+    
+    
+4. *Restart MySQL:*
+    
+    Restart MySQL to apply the configuration changes:
+    
+    bash
+    sudo systemctl restart mysql
+    
+    
+    
+
+---
+
+## Step 11: Allow Apache and MySQL through the Firewall
+
+### On the Server:
+
+1. *Open HTTP (port 80) and MySQL (port 3306) on the Firewall:*
+    
+    If you are using ufw as your firewall, run the following commands:
+    
+    bash
+    sudo ufw allow 80/tcp
+    sudo ufw allow 3306/tcp
+    
+    
+    
+2. *Reload Firewall:*
+    
+    bash
+    sudo ufw reload
+    
+    
+    
+
+---
+
+With these steps, you should have MySQL and phpMyAdmin installed, configured, and accessible, with remote access enabled
